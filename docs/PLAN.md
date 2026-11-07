@@ -1,5 +1,9 @@
 # PLAN
 
+## Biome patch alignment (PR #21)
+
+- [x] Align the configuration schema with Biome 2.6.5 without changing rule settings or formatting application code. Final acceptance requires local typecheck/lint/tests/build, no schema-version diagnostic and green final PR CI; no runtime or UI change.
+
 Sign-off requires local checks and green branch CI. Evidence lives in
 [VERIFICATION.md](VERIFICATION.md); source limits and remaining issues are
 recorded in [KNOWN_ISSUES.md](KNOWN_ISSUES.md).
