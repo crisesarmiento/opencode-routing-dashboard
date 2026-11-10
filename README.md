@@ -221,6 +221,27 @@ coverage and source identity. Unknown values are not zero; CSV formula-leading
 text is escaped. A CLI export fails explicitly if a configured remote source
 cannot provide its initial snapshot, rather than silently omitting it.
 
+### Configuration diagnostic (`diagnose`)
+
+For setup help, `diagnose` previews an allowlisted, local-only description of your
+configuration. It is not a period report (`export`) and not a replay pack.
+
+```sh
+bun src/cli.ts diagnose --config sources.json            # preview on stdout
+bun src/cli.ts diagnose --config sources.json --output diagnostic.json  # also write a new file
+# --for-command serve|agent selects the command being diagnosed (default serve).
+```
+
+Included: version, command, `bind`, `port`, `demo`, `redact-prompts`, `stats-enabled`,
+`stats-interval`, `max-records`, source ids and labels, the *name* of each `tokenEnv`
+(never its value) and whether each path option is set or unset (never the path).
+Everything else is omitted and listed by name with a reason (for example endpoints,
+directory rules, state/snapshot directories); omitted content is not sanitized or read
+into the output. Paths named `.ssh`, `.env*`, `auth.json` or `service.json` are rejected
+before any content is read, for `--config` and `--output`. Existing output files are
+never overwritten and nothing is uploaded. It cannot detect a secret placed inside an
+allowed string, such as a source label (see KNOWN_ISSUES).
+
 ### Quota and alert settings
 
 Pass `--analytics-config analytics.json` to load a bounded, explicit settings file:
