@@ -19,6 +19,11 @@ Ranked by impact; none prevents the documented fixture/local workflow.
   source stats remain separate and are not summed into combined financial totals.
 - Agent prompt redaction removes the known observe/route `prompt` fields only.
   Unknown record fields are preserved by design and are not generally sanitized.
+- The `diagnose` configuration diagnostic uses an allowlist, not a secret scanner. If a
+  secret is placed inside an allowed string (for example a source label), the command
+  does not detect it and the artifact will contain it; review the preview before sharing.
+  Omissions are by field name only, and verification used synthetic fixtures, not real
+  user configuration.
 - Agent protocol retention is capped at 10,000 records per log source; larger agent
   retention settings must fail explicitly rather than produce unreadable envelopes.
 - Remote requests refuse configured HTTP(S)/ALL proxy variables, even with NO_PROXY.

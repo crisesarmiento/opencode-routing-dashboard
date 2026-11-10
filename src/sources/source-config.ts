@@ -77,11 +77,11 @@ export function parseSourceConfig(value: unknown): SourceConfig[] {
     return v as SourceConfig;
   });
 }
-const credentialPath = (path: string) =>
+export const credentialPath = (path: string) =>
   resolve(path)
     .split(/[\\/]/)
     .some((part) => /^(?:\.ssh|\.env.*|auth\.json|service\.json)$/i.test(part));
-async function readConfig(path: string): Promise<unknown> {
+export async function readConfig(path: string): Promise<unknown> {
   if (credentialPath(path)) throw new Error("Invalid configuration path");
   const actual = await realpath(path);
   if (credentialPath(actual)) throw new Error("Invalid configuration path");
