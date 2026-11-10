@@ -183,7 +183,8 @@ full raw records remain inspectable for displayed events.
 - **History:** weekly stats snapshots; each point retains its own source range.
 - **Sources:** combined or individual PC/Orca/local inputs, health and client/directory evidence. Configured labels are not proof of runtime client identity.
 - **Alerts / Quota / Presets:** debounced evidence alerts, user-limit estimates and period comparison with source coverage. Unknown execution metrics remain unavailable.
-- **Replay:** play/pause, stepping and speed over a retained session, synchronized with Call in focus.
+- **Sessions:** read-only inspector over retained, transmitted events. It is not a complete archive and cannot show omitted or evicted rows.
+- **Replay:** play/pause, stepping and speed over a retained session, synchronized with Call in focus. It is not a durable session archive.
 - **Export:** period downloads in Markdown/CSV for the selected source or all sources.
 
 Shortcuts: `/` search, `f` filters, `s` sources, `j`/`k` rows, `Enter` details, `1`–`8` drawers, `Esc` close. Replay controls also expose keyboard hints.
@@ -192,6 +193,10 @@ The detail drawer preserves raw records and a session timeline of transmitted ev
 ![Fixture replay switchboard](docs/screenshots/m4-flow-1440x900.png)
 
 ![Context agreement at 1024×768](docs/screenshots/m4-agreement-1024x768.png)
+
+![Sessions inspector over retained events](docs/screenshots/m43-sessions-list-1440x900.png)
+
+![Replay over a retained session](docs/screenshots/m9-replay-1440x900.png)
 
 ![Multi-source fixture exchange](docs/screenshots/m9-real-combined-1440x900.png)
 
