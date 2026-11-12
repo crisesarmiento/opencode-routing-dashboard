@@ -287,3 +287,41 @@ test("inspectSession and listSessions never mutate the input state", () => {
   expect(state.events).toEqual(eventsBefore);
   expect(state.permissions).toEqual(permissionsBefore);
 });
+
+test("unknown-execution fixture: suggestion without executing model stays unknown in inspector and exports", async () => {
+  const { parseLines } = await import("../src/core/schema");
+  const { buildReport, formatReport, parseReportRange } = await import("../src/core/reports");
+  const dir = "fixtures/unknown-execution";
+  const o = parseLines("observe", await Bun.file(`${dir}/jev-observe.jsonl`).text());
+  const r = parseLines("route", await Bun.file(`${dir}/jev-route.jsonl`).text());
+  const state = aggregate({
+    observe: o.records,
+    route: r.records,
+    permissions: [],
+    stats: null,
+    malformed: { observe: o.malformed, route: r.malformed, permissions: 0 },
+  });
+
+  const result = inspectSession(state, "ses_FIXTURE_U1");
+  expect(result.events).toHaveLength(2);
+  for (const f of result.fields) {
+    expect(field(f, "suggestion").state).toBe("recorded");
+    for (const key of ["executionModel", "executionAgent", "executionProvider", "executionVariant"] as const)
+      expect(field(f, key)).toEqual({ state: "not_available", reason: "not in Jev logs", role: "execution" });
+  }
+  for (const e of state.events) {
+    expect(e.suggestion).not.toBeNull();
+    expect(e.executionModel).toBeNull();
+  }
+
+  const range = parseReportRange("2026-11-04", "2026-11-04");
+  const report = buildReport([{ id: "fx", label: "Fixture", state }], range);
+  const csv = formatReport(report, "csv");
+  const md = formatReport(report, "md");
+  const csvRows = csv.split(/\r?\n/).filter((l) => l.includes("execution model"));
+  expect(csvRows).toHaveLength(2);
+  for (const row of csvRows) expect(row).toMatch(/execution model,,not available per event$/);
+  expect(md).toContain("not available per event");
+  expect(md).not.toMatch(/execution model\s*\|\s*0\s*\|/);
+  expect(md).not.toContain("jev-1.13-free | not available per event");
+});
