@@ -19,7 +19,7 @@ If another reviewer joins, consider requiring one external approval explicitly.
 ## Tracking work
 
 Use the public [Route project board](https://github.com/users/crisesarmiento/projects/6) (the GitHub project is still titled OpenCode Routing Dashboard),
-linked to this repository. It tracks three independent fields:
+linked to this repository. The planned public domain is `useroute.dev` (not registered yet; `route.dev` is registered elsewhere and is not this project). The GitHub repository name remains `crisesarmiento/opencode-routing-dashboard` until a separately approved rename. It tracks three independent fields:
 
 | Field | Meaning |
 | --- | --- |

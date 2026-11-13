@@ -6,6 +6,8 @@ Route (formerly opencode-routing-dashboard) is a real-time, local-first switchbo
 Jev suggestions, recorded context agents, route decisions, aggregate model usage and errors.
 It does not invent execution agents, per-message model usage or fallback events that the logs cannot establish.
 
+The planned public domain is `useroute.dev`. It is not registered yet, and no site is live there. `route.dev` is already registered by a third party and is not this project.
+
 ## Why
 
 Multi-agent setups such as [oh-my-opencode-slim](https://github.com/alvinunreal/oh-my-opencode-slim)
