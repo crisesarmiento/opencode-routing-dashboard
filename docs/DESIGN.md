@@ -2,6 +2,8 @@
 
 This is the UI contract for **Route** (formerly opencode-routing-dashboard). The planned public domain is `useroute.dev` (not registered yet; `route.dev` is registered elsewhere and is not this project).
 
+The draft visual identity for a future redesign is in [BRAND](BRAND.md). It is a draft pending Decision; it does not replace the Lane Bay contract below or authorize implementation.
+
 The UI must be beautiful, original, dynamic and fun, and dense. It is explicitly **not** a generic AI dashboard.
 
 ## Contract status

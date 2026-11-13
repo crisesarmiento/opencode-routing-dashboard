@@ -19,7 +19,8 @@ whether quota is burned in the wrong place, or whether the router agrees with th
 
 Implementation progress is tracked in [docs/PLAN.md](docs/PLAN.md).
 See [docs/SPEC.md](docs/SPEC.md) for source formats and evidence limits,
-[docs/DESIGN.md](docs/DESIGN.md) for the switchboard system and
+[docs/DESIGN.md](docs/DESIGN.md) for the switchboard system,
+[docs/BRAND.md](docs/BRAND.md) for the draft visual identity (pending Decision; it does not authorize a redesign), and
 [docs/VERIFICATION.md](docs/VERIFICATION.md) for checks and screenshots.
 Ranked limitations and process-evidence gaps are listed in [docs/KNOWN_ISSUES.md](docs/KNOWN_ISSUES.md).
 Future directions and their approval boundaries live in [docs/ROADMAP.md](docs/ROADMAP.md).
