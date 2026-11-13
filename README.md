@@ -1,8 +1,12 @@
-# opencode-routing-dashboard
+# Route
 
-A real-time, local-first switchboard for [OpenCode](https://opencode.ai) routing:
+![Route — honest model routing observability](docs/assets/route-header.png)
+
+Route (formerly opencode-routing-dashboard) is a real-time, local-first switchboard for [OpenCode](https://opencode.ai) routing:
 Jev suggestions, recorded context agents, route decisions, aggregate model usage and errors.
 It does not invent execution agents, per-message model usage or fallback events that the logs cannot establish.
+
+The planned public domain is `useroute.dev`. It is not registered yet, and no site is live there. `route.dev` is already registered by a third party and is not this project.
 
 ## Why
 
@@ -15,7 +19,8 @@ whether quota is burned in the wrong place, or whether the router agrees with th
 
 Implementation progress is tracked in [docs/PLAN.md](docs/PLAN.md).
 See [docs/SPEC.md](docs/SPEC.md) for source formats and evidence limits,
-[docs/DESIGN.md](docs/DESIGN.md) for the switchboard system and
+[docs/DESIGN.md](docs/DESIGN.md) for the switchboard system,
+[docs/BRAND.md](docs/BRAND.md) for the draft visual identity (pending Decision; it does not authorize a redesign), and
 [docs/VERIFICATION.md](docs/VERIFICATION.md) for checks and screenshots.
 Ranked limitations and process-evidence gaps are listed in [docs/KNOWN_ISSUES.md](docs/KNOWN_ISSUES.md).
 Future directions and their approval boundaries live in [docs/ROADMAP.md](docs/ROADMAP.md).
