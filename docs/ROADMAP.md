@@ -1,5 +1,7 @@
 # Product roadmap
 
+This is the product roadmap for **Route** (formerly opencode-routing-dashboard).
+
 This is a revisable product direction, not a release schedule, implementation approval, or claim of shipped functionality. Issues and [project fields](REPOSITORY.md) retain their own decisions. `Todo` means backlog; `Under evaluation` does not authorize coding. No owner, version or delivery date is assigned by this document.
 
 ## North star

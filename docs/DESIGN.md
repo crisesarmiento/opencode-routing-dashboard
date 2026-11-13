@@ -1,5 +1,7 @@
 # DESIGN
 
+This is the UI contract for **Route** (formerly opencode-routing-dashboard).
+
 The UI must be beautiful, original, dynamic and fun, and dense. It is explicitly **not** a generic AI dashboard.
 
 ## Contract status

@@ -1,6 +1,8 @@
-# opencode-routing-dashboard
+# Route
 
-A real-time, local-first switchboard for [OpenCode](https://opencode.ai) routing:
+![Route — honest model routing observability](docs/assets/route-header.png)
+
+Route (formerly opencode-routing-dashboard) is a real-time, local-first switchboard for [OpenCode](https://opencode.ai) routing:
 Jev suggestions, recorded context agents, route decisions, aggregate model usage and errors.
 It does not invent execution agents, per-message model usage or fallback events that the logs cannot establish.
 
