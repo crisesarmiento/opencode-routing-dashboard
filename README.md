@@ -242,6 +242,12 @@ before any content is read, for `--config` and `--output`. Existing output files
 never overwritten and nothing is uploaded. It cannot detect a secret placed inside an
 allowed string, such as a source label (see KNOWN_ISSUES).
 
+New files use schema id `route.config-diagnostic/1`. That id names the product Route.
+The npm package is `useroute` because `route` is already an unrelated package.
+Files already written with `opencode-routing-dashboard.config-diagnostic/1` use the
+same allowlist. Readers should accept both ids until the deprecated
+`opencode-routing-dashboard` command is removed. This release writes only the new id.
+
 ### Quota and alert settings
 
 Pass `--analytics-config analytics.json` to load a bounded, explicit settings file:
@@ -310,21 +316,27 @@ Each snapshot keeps its own stats range, so overlapping ranges are not additive 
 bun pm pack --destination /path/to/output
 ```
 
-The archive includes an executable `opencode-routing-dashboard` bin, server source, built assets,
-local fonts/licenses and the units in `contrib/systemd/`. It excludes fixtures and tests. This PR
-does not publish a registry package: `bunx opencode-routing-dashboard` is the intended published
-entry point, not a claim that this branch is available on the registry.
+The archive includes an executable `useroute` bin, a deprecated `opencode-routing-dashboard`
+alias for this release, server source, built assets, local fonts/licenses and the units in
+`contrib/systemd/`. It excludes fixtures and tests. This does not publish a registry package:
+`bunx useroute` is the intended published entry point, not a claim that this branch is on the
+registry. The npm name `route` already belongs to an unrelated library, so the package and
+command are `useroute`. The product name is Route. `useroute.dev` is the planned domain and is
+not registered.
 
 For an installed executable on Linux, copy the three example units into your user systemd directory,
 adjust their `PATH` and optional `ORD_*` environment settings, then explicitly enable the desired units:
 
 ```sh
 mkdir -p ~/.config/systemd/user
-cp contrib/systemd/opencode-routing-dashboard* ~/.config/systemd/user/
+cp contrib/systemd/useroute.service contrib/systemd/useroute-snapshot.service contrib/systemd/useroute-snapshot.timer ~/.config/systemd/user/
 systemctl --user daemon-reload
-systemctl --user enable --now opencode-routing-dashboard.service
-systemctl --user enable --now opencode-routing-dashboard-snapshot.timer
+systemctl --user enable --now useroute.service
+systemctl --user enable --now useroute-snapshot.timer
 ```
+
+An install that still uses the `opencode-routing-dashboard` units should stop and disable those
+units before enabling these. The steps are in [contrib/systemd/README.md](contrib/systemd/README.md).
 
 The snapshot timer uses `OnCalendar=weekly` and `Persistent=true`. Both services need Bun and the
 dashboard executable on their service `PATH`, and matching snapshot/state settings. No service is

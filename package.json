@@ -1,11 +1,12 @@
 {
-  "name": "opencode-routing-dashboard",
+  "name": "useroute",
   "version": "0.2.0",
-  "description": "Real-time localhost dashboard for OpenCode routing",
+  "description": "Route — honest model routing observability",
   "license": "MIT",
   "type": "module",
   "bin": {
-    "opencode-routing-dashboard": "src/cli.ts"
+    "useroute": "src/cli.ts",
+    "opencode-routing-dashboard": "src/legacy-bin.ts"
   },
   "files": ["src", "dist", "contrib", "README.md", "LICENSE"],
   "scripts": {
