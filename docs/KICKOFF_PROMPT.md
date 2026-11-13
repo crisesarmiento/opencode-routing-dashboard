@@ -1,7 +1,7 @@
 # Kickoff prompt (paste into OpenCode, orchestrator agent, in this repo)
 
 ```
-/deepwork Build opencode-routing-dashboard end to end in this repository.
+/deepwork Build Route (formerly opencode-routing-dashboard) end to end in this repository.
 
 Read first, in order: AGENTS.md, CONTRIBUTING.md, .agents/skills/*/SKILL.md (branch-and-pr, tests-first, release), docs/SPEC.md, docs/DESIGN.md, docs/ARCHITECTURE.md, docs/PLAN.md, fixtures/.
 They are the source of truth. If they conflict, SPEC.md wins; record the decision in docs/SPEC.md.
