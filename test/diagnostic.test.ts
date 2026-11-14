@@ -3,7 +3,7 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { loadConfig } from "../src/config";
-import { ALLOWED_FIELDS, buildDiagnostic, formatDiagnostic } from "../src/core/diagnostic";
+import { ALLOWED_FIELDS, buildDiagnostic, formatDiagnostic, isDiagnosticSchema } from "../src/core/diagnostic";
 import { collectDiagnostic } from "../src/sources/diagnostic";
 
 // Synthetic values only: no real credentials, prompts or forbidden files.
@@ -72,6 +72,16 @@ describe("configuration diagnostic", () => {
     expect(d.omitted.every((o) => o.reason.length > 0)).toBe(true);
     const text = formatDiagnostic(d);
     for (const hidden of [PROMPT, "10.0.0.5", "/x/stats.json", "/work", dir]) expect(text).not.toContain(hidden);
+    expect(d.schema).toBe("route.config-diagnostic/1");
+    expect(text).toContain('"schema": "route.config-diagnostic/1"');
+    expect(text).not.toContain("opencode-routing-dashboard.config-diagnostic/1");
+  });
+
+  test("accepts the previous diagnostic schema id for one release", () => {
+    expect(isDiagnosticSchema("route.config-diagnostic/1")).toBe(true);
+    expect(isDiagnosticSchema("opencode-routing-dashboard.config-diagnostic/1")).toBe(true);
+    expect(isDiagnosticSchema("useroute.config-diagnostic/1")).toBe(false);
+    expect(isDiagnosticSchema("route.config-diagnostic/2")).toBe(false);
   });
 
   test("an unrecognized config key is omitted by name, not sanitized", () => {

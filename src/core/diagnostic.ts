@@ -21,8 +21,20 @@ export type DiagnosticCommand = (typeof DIAGNOSTIC_COMMANDS)[number];
 export type PathState = "set" | "unset";
 export type DiagnosticSource = { id: string; label: string; "token-env"?: string };
 export type Omission = { field: string; reason: string };
+/** Written schema. Names the product Route, not the npm package `useroute`. */
+export const DIAGNOSTIC_SCHEMA = "route.config-diagnostic/1" as const;
+/**
+ * Previous id. The allowlist is unchanged. Accept it for this release so stored
+ * files keep working; new output writes DIAGNOSTIC_SCHEMA only. Drop this when
+ * the `opencode-routing-dashboard` command alias is removed.
+ */
+export const LEGACY_DIAGNOSTIC_SCHEMA = "opencode-routing-dashboard.config-diagnostic/1" as const;
+export type DiagnosticSchema = typeof DIAGNOSTIC_SCHEMA | typeof LEGACY_DIAGNOSTIC_SCHEMA;
+export function isDiagnosticSchema(value: unknown): value is DiagnosticSchema {
+  return value === DIAGNOSTIC_SCHEMA || value === LEGACY_DIAGNOSTIC_SCHEMA;
+}
 export type Diagnostic = {
-  schema: "opencode-routing-dashboard.config-diagnostic/1";
+  schema: typeof DIAGNOSTIC_SCHEMA;
   included: {
     version: string;
     command: DiagnosticCommand;
@@ -111,7 +123,7 @@ export function buildDiagnostic(
     .sort()
     .map((key) => ({ field: key, reason: CONFIG_OMISSIONS[key] ?? "not in the allowlist" }));
   return {
-    schema: "opencode-routing-dashboard.config-diagnostic/1",
+    schema: DIAGNOSTIC_SCHEMA,
     included: {
       version: options.version,
       command: options.command,

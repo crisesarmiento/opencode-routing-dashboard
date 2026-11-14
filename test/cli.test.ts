@@ -29,6 +29,42 @@ describe("CLI", () => {
     expect(result.code).toBe(0);
     expect(result.stdout).toContain("snapshot");
     expect(result.stdout).toContain("serve");
+    expect(result.stdout).toContain("Route — honest model routing observability");
+    expect(result.stdout).toContain("Usage: useroute ");
+    expect(result.stdout).toContain(
+      "opencode-routing-dashboard is a deprecated alias for useroute and will be removed in the next release.",
+    );
+    expect(result.stdout).not.toContain("UseRoute");
+    expect(result.stderr).toBe("");
+  });
+
+  test("deprecated command alias warns and still documents useroute", async () => {
+    const legacy = resolve(import.meta.dir, "../src/legacy-bin.ts");
+    const child = Bun.spawn([process.execPath, legacy, "--help"], {
+      cwd: dir,
+      env: { PATH: process.env.PATH, HOME: dir },
+      stdout: "pipe",
+      stderr: "pipe",
+    });
+    const [stdout, stderr, code] = await Promise.all([
+      new Response(child.stdout).text(),
+      new Response(child.stderr).text(),
+      child.exited,
+    ]);
+    expect(code).toBe(0);
+    expect(stdout).toContain("Usage: useroute ");
+    expect(stdout).not.toContain("UseRoute");
+    expect(stderr).toContain(
+      "opencode-routing-dashboard is a deprecated alias for useroute and will be removed in the next release.",
+    );
+  });
+
+  test("the old command name is recognized from the argv basename only", async () => {
+    const { binNameFromArgv, deprecationNotice } = await import("../src/cli");
+    expect(binNameFromArgv("/usr/local/bin/opencode-routing-dashboard")).toBe("opencode-routing-dashboard");
+    expect(binNameFromArgv("/usr/local/bin/useroute")).toBe("useroute");
+    expect(binNameFromArgv("/work/opencode-routing-dashboard/src/cli.ts")).toBe("useroute");
+    expect(deprecationNotice("useroute")).toBeNull();
   });
 
   test("rejects invalid flags", async () => {
@@ -42,6 +78,11 @@ describe("CLI", () => {
     const pkg = await Bun.file(new URL("../package.json", import.meta.url)).json();
     expect(VERSION).toBe("0.2.0");
     expect(pkg.version).toBe(VERSION);
+    expect(pkg.name).toBe("useroute");
+    expect(pkg.bin.useroute).toBe("src/cli.ts");
+    // Separate entry so the alias can warn. A symlink to cli.ts is realpathed and would not.
+    expect(pkg.bin["opencode-routing-dashboard"]).toBe("src/legacy-bin.ts");
+    expect(pkg.description).toBe("Route — honest model routing observability");
   });
 
   test("captures a snapshot and exits without starting HTTP", async () => {

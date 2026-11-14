@@ -1,5 +1,5 @@
 [Unit]
-Description=Capture OpenCode routing dashboard snapshot weekly
+Description=Capture a Route snapshot weekly
 
 [Timer]
 OnCalendar=weekly

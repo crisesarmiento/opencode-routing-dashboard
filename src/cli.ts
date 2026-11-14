@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+import { basename } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadConfig } from "./config";
 import { DIAGNOSTIC_COMMANDS, type DiagnosticCommand, formatDiagnostic } from "./core/diagnostic";
@@ -6,8 +7,43 @@ import { formatReport, parseReportRange } from "./core/reports";
 import { startApp } from "./server";
 import { startAgent } from "./server/agent";
 import { assertAllowedPath, collectDiagnostic, writeDiagnostic } from "./sources/diagnostic";
+
 export const VERSION = "0.2.0";
-if (import.meta.main) {
+export const PRODUCT_NAME = "Route";
+export const TAGLINE = "honest model routing observability";
+export const BIN_NAME = "useroute";
+export const LEGACY_BIN_NAME = "opencode-routing-dashboard";
+export const BIN_ALIAS_NOTE = `${LEGACY_BIN_NAME} is a deprecated alias for ${BIN_NAME} and will be removed in the next release.`;
+export type BinName = typeof BIN_NAME | typeof LEGACY_BIN_NAME;
+
+/** Basename only. A checkout path that contains the old name must not count as the alias. */
+export function binNameFromArgv(argv1: string): BinName {
+  return basename(argv1) === LEGACY_BIN_NAME ? LEGACY_BIN_NAME : BIN_NAME;
+}
+
+export function deprecationNotice(bin: string): string | null {
+  return bin === LEGACY_BIN_NAME ? BIN_ALIAS_NOTE : null;
+}
+
+const USAGE_FLAGS =
+  "[serve|snapshot|agent|export|diagnose] [--output PATH] [--for-command serve|agent] [--state-dir PATH] [--observe-path PATH] [--route-path PATH] [--permissions-path PATH] [--port PORT] [--stats-interval SECONDS] [--snapshot-dir PATH] [--stats-command COMMAND] [--stats-file PATH] [--stats-enabled true|false] [--max-records N] [--demo true|false] [--config PATH] [--local-source-config PATH] [--bind IP] [--token-env NAME] [--redact-prompts true|false]";
+
+export function usageText(): string {
+  return [
+    `${PRODUCT_NAME} — ${TAGLINE}`,
+    `Usage: ${BIN_NAME} ${USAGE_FLAGS}`,
+    "  serve     Start the dashboard (default)",
+    "  agent     Export local sources (redacts known observe/route prompt fields when enabled)",
+    "  snapshot  Capture one weekly snapshot and exit",
+    "  export    Print report (--from DATE --to DATE --format md|csv)",
+    "  diagnose  Preview an allowlisted configuration diagnostic on stdout (--output PATH also writes a new local file; nothing is uploaded)",
+    BIN_ALIAS_NOTE,
+  ].join("\n");
+}
+
+export async function main(bin: BinName): Promise<void> {
+  const notice = deprecationNotice(bin);
+  if (notice) console.error(notice);
   try {
     const args = process.argv.slice(2);
     const command =
@@ -51,10 +87,7 @@ if (import.meta.main) {
       }
     }
     const config = loadConfig(process.env, args);
-    if (config.help)
-      console.log(
-        "Usage: opencode-routing-dashboard [serve|snapshot|agent|export|diagnose] [--output PATH] [--for-command serve|agent] [--state-dir PATH] [--observe-path PATH] [--route-path PATH] [--permissions-path PATH] [--port PORT] [--stats-interval SECONDS] [--snapshot-dir PATH] [--stats-command COMMAND] [--stats-file PATH] [--stats-enabled true|false] [--max-records N] [--demo true|false] [--config PATH] [--local-source-config PATH] [--bind IP] [--token-env NAME] [--redact-prompts true|false]\n  serve     Start the dashboard (default)\n  agent     Export local sources (redacts known observe/route prompt fields when enabled)\n  snapshot  Capture one weekly snapshot and exit\n  export    Print report (--from DATE --to DATE --format md|csv)\n  diagnose  Preview an allowlisted configuration diagnostic on stdout (--output PATH also writes a new local file; nothing is uploaded)",
-      );
+    if (config.help) console.log(usageText());
     else if (command === "diagnose") {
       const target = diagnoseOptions["for-command"] ?? "serve";
       if (!DIAGNOSTIC_COMMANDS.includes(target as DiagnosticCommand))
@@ -86,7 +119,7 @@ if (import.meta.main) {
         command === "agent"
           ? await startAgent(config, { bind: config.bind, token, redactPrompts: config.redactPrompts })
           : await startApp(config, { staticDir: fileURLToPath(new URL("../dist/", import.meta.url)) });
-      console.log(`opencode-routing-dashboard ${VERSION}: ${app.url}`);
+      console.log(`${bin} ${VERSION}: ${app.url}`);
       let stopping = false;
       const stop = async () => {
         if (stopping) return;
@@ -101,3 +134,5 @@ if (import.meta.main) {
     process.exitCode = 1;
   }
 }
+
+if (import.meta.main) await main(binNameFromArgv(process.argv[1] ?? ""));
